@@ -41,3 +41,55 @@ insert into product_tags(code,name) values
 
 on conflict do nothing;
 
+
+---------------------------------------------------------
+-- Product Status
+---------------------------------------------------------
+
+insert into product_statuses(code,name) values
+
+('draft','Draft'),
+('active','Active'),
+('inactive','Inactive'),
+('discontinued','Discontinued')
+
+on conflict do nothing;
+
+---------------------------------------------------------
+-- Storage Types
+---------------------------------------------------------
+
+insert into storage_types(code,name) values
+
+('ambient','Ambient'),
+('chiller','Chiller'),
+('freezer','Freezer')
+
+on conflict do nothing;
+
+---------------------------------------------------------
+-- Inventory Strategy
+---------------------------------------------------------
+
+insert into inventory_strategies(code,name) values
+
+('fifo','FIFO'),
+('fefo','FEFO')
+
+on conflict do nothing;
+
+---------------------------------------------------------
+-- Packaging Types
+---------------------------------------------------------
+
+insert into packaging_types(code,name) values
+
+('piece','Piece'),
+('bag','Bag'),
+('net','Net'),
+('box','Box'),
+('carton','Carton'),
+('crate','Crate')
+
+on conflict do nothing;
+

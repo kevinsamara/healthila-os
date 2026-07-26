@@ -195,3 +195,103 @@ on products(brand_id);
 create index if not exists idx_product_prices_product
 on product_prices(product_id);
 
+
+---------------------------------------------------------
+-- PRODUCT STATUS
+---------------------------------------------------------
+
+create table if not exists product_statuses (
+
+    id uuid primary key default gen_random_uuid(),
+
+    code text not null unique,
+
+    name text not null
+
+);
+
+---------------------------------------------------------
+-- STORAGE TYPES
+---------------------------------------------------------
+
+create table if not exists storage_types (
+
+    id uuid primary key default gen_random_uuid(),
+
+    code text not null unique,
+
+    name text not null
+
+);
+
+---------------------------------------------------------
+-- INVENTORY STRATEGIES
+---------------------------------------------------------
+
+create table if not exists inventory_strategies (
+
+    id uuid primary key default gen_random_uuid(),
+
+    code text not null unique,
+
+    name text not null
+
+);
+
+---------------------------------------------------------
+-- UPDATE PRODUCTS
+---------------------------------------------------------
+
+alter table products
+
+add column if not exists status_id uuid
+references product_statuses(id),
+
+add column if not exists storage_type_id uuid
+references storage_types(id),
+
+add column if not exists inventory_strategy_id uuid
+references inventory_strategies(id),
+
+add column if not exists shelf_life_days integer,
+
+add column if not exists minimum_stock numeric(18,2),
+
+add column if not exists reorder_point numeric(18,2);
+
+---------------------------------------------------------
+-- PACKAGING
+---------------------------------------------------------
+
+create table if not exists packaging_types (
+
+    id uuid primary key default gen_random_uuid(),
+
+    code text unique,
+
+    name text not null
+
+);
+
+create table if not exists product_packagings (
+
+    id uuid primary key default gen_random_uuid(),
+
+    product_id uuid not null
+        references products(id) on delete cascade,
+
+    packaging_type_id uuid
+        references packaging_types(id),
+
+    quantity numeric(18,2) not null,
+
+    unit_id uuid references units(id),
+
+    barcode text,
+
+    sku text,
+
+    is_default boolean default false
+
+);
+
