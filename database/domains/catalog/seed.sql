@@ -93,3 +93,58 @@ insert into packaging_types(code,name) values
 
 on conflict do nothing;
 
+
+---------------------------------------------------------
+-- Product Attributes
+---------------------------------------------------------
+
+insert into product_attributes
+(code,name,data_type) values
+
+('origin','Country of Origin','text'),
+('variety','Variety','text'),
+('grade','Grade','option'),
+('brix','Brix','number'),
+('sweetness','Sweetness','number'),
+('seedless','Seedless','boolean'),
+('color','Color','text'),
+('organic','Organic','boolean'),
+('harvest_date','Harvest Date','date');
+
+---------------------------------------------------------
+-- Grade Options
+---------------------------------------------------------
+
+insert into product_attribute_options
+(attribute_id,value)
+
+select
+id,
+'A'
+from product_attributes
+where code='grade'
+
+on conflict do nothing;
+
+insert into product_attribute_options
+(attribute_id,value)
+
+select
+id,
+'B'
+from product_attributes
+where code='grade'
+
+on conflict do nothing;
+
+insert into product_attribute_options
+(attribute_id,value)
+
+select
+id,
+'C'
+from product_attributes
+where code='grade'
+
+on conflict do nothing;
+

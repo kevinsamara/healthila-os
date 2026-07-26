@@ -295,3 +295,84 @@ create table if not exists product_packagings (
 
 );
 
+
+---------------------------------------------------------
+-- PRODUCT ATTRIBUTES
+---------------------------------------------------------
+
+create table if not exists product_attributes (
+
+    id uuid primary key default gen_random_uuid(),
+
+    code text not null unique,
+
+    name text not null,
+
+    data_type text not null,
+
+    unit text,
+
+    is_required boolean default false,
+
+    created_at timestamptz default now(),
+
+    updated_at timestamptz default now()
+
+);
+
+---------------------------------------------------------
+-- PRODUCT ATTRIBUTE OPTIONS
+---------------------------------------------------------
+
+create table if not exists product_attribute_options (
+
+    id uuid primary key default gen_random_uuid(),
+
+    attribute_id uuid not null
+        references product_attributes(id) on delete cascade,
+
+    value text not null,
+
+    sort_order integer default 0,
+
+    unique(attribute_id, value)
+
+);
+
+---------------------------------------------------------
+-- PRODUCT ATTRIBUTE VALUES
+---------------------------------------------------------
+
+create table if not exists product_attribute_values (
+
+    id uuid primary key default gen_random_uuid(),
+
+    product_id uuid not null
+        references products(id) on delete cascade,
+
+    attribute_id uuid not null
+        references product_attributes(id),
+
+    option_id uuid
+        references product_attribute_options(id),
+
+    value_text text,
+
+    value_number numeric(18,4),
+
+    value_boolean boolean,
+
+    value_date date,
+
+    created_at timestamptz default now(),
+
+    updated_at timestamptz default now()
+
+);
+
+create index if not exists idx_product_attribute_values_product
+on product_attribute_values(product_id);
+
+create index if not exists idx_product_attribute_values_attribute
+on product_attribute_values(attribute_id);
+
