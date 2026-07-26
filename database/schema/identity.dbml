@@ -1,0 +1,79 @@
+//////////////////////////////////////////////////////
+// Identity Domain
+//////////////////////////////////////////////////////
+
+Table users {
+  id uuid [pk]
+  email varchar [not null, unique]
+  password_hash varchar
+  full_name varchar
+  phone varchar
+  status varchar
+  created_at timestamptz
+  updated_at timestamptz
+  deleted_at timestamptz
+}
+
+Table roles {
+  id uuid [pk]
+  code varchar [unique]
+  name varchar
+}
+
+Table permissions {
+  id uuid [pk]
+  code varchar [unique]
+  name varchar
+}
+
+Table role_permissions {
+  role_id uuid
+  permission_id uuid
+}
+
+Table user_roles {
+  user_id uuid
+  role_id uuid
+}
+
+Table customers {
+  id uuid [pk]
+  code varchar [unique]
+  full_name varchar
+  phone varchar
+  email varchar
+  notes text
+  created_at timestamptz
+  updated_at timestamptz
+  deleted_at timestamptz
+}
+
+Table customer_addresses {
+  id uuid [pk]
+  customer_id uuid
+  label varchar
+  recipient_name varchar
+  phone varchar
+  address text
+  latitude decimal
+  longitude decimal
+  is_default boolean
+}
+
+Table suppliers {
+  id uuid [pk]
+  code varchar [unique]
+  name varchar
+  phone varchar
+  email varchar
+  address text
+  notes text
+}
+
+Ref: customer_addresses.customer_id > customers.id
+
+Ref: user_roles.user_id > users.id
+Ref: user_roles.role_id > roles.id
+
+Ref: role_permissions.role_id > roles.id
+Ref: role_permissions.permission_id > permissions.id
