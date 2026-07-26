@@ -185,3 +185,89 @@ create table if not exists inventory_adjustments (
 
 );
 
+
+---------------------------------------------------------
+-- UNIT CONVERSIONS
+---------------------------------------------------------
+
+create table if not exists unit_conversions (
+
+    id uuid primary key default gen_random_uuid(),
+
+    product_id uuid
+        references products(id)
+        on delete cascade,
+
+    from_unit_id uuid
+        not null
+        references units(id),
+
+    to_unit_id uuid
+        not null
+        references units(id),
+
+    multiplier numeric(18,6) not null,
+
+    created_at timestamptz default now(),
+
+    unique(product_id, from_unit_id, to_unit_id)
+
+);
+
+---------------------------------------------------------
+-- ALLOCATION STRATEGIES
+---------------------------------------------------------
+
+create table if not exists allocation_strategies (
+
+    id uuid primary key default gen_random_uuid(),
+
+    code text not null unique,
+
+    name text not null
+
+);
+
+---------------------------------------------------------
+-- PRODUCT ALLOCATION STRATEGY
+---------------------------------------------------------
+
+alter table products
+
+add column if not exists allocation_strategy_id uuid
+references allocation_strategies(id);
+
+---------------------------------------------------------
+-- INVENTORY SNAPSHOTS
+---------------------------------------------------------
+
+create table if not exists inventory_snapshots (
+
+    id uuid primary key default gen_random_uuid(),
+
+    warehouse_id uuid
+        references warehouses(id),
+
+    product_id uuid
+        references products(id),
+
+    snapshot_date date not null,
+
+    quantity numeric(18,2) not null,
+
+    created_at timestamptz default now(),
+
+    unique (
+        warehouse_id,
+        product_id,
+        snapshot_date
+    )
+
+);
+
+create index if not exists idx_inventory_snapshot_date
+on inventory_snapshots(snapshot_date);
+
+create index if not exists idx_inventory_snapshot_product
+on inventory_snapshots(product_id);
+
