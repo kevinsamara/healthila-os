@@ -6,7 +6,14 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:build": "./scripts/build-migration.sh",
+    "db:push": "supabase db push",
+    "db:reset": "supabase db reset",
+    "db:types": "./scripts/types/generate.sh",
+    "db:diff": "supabase db diff",
+    "db:start": "supabase start",
+    "db:stop": "supabase stop"
   },
   "dependencies": {
     "@base-ui/react": "^1.6.0",

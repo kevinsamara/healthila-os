@@ -17,7 +17,7 @@ create table if not exists domain_events (
 
     occurred_at timestamptz default now(),
 
-    created_by uuid references users(id)
+    created_by uuid
 
 );
 

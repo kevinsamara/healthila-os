@@ -17,7 +17,7 @@ create table if not exists audit_logs (
 
     new_data jsonb,
 
-    changed_by uuid references users(id),
+    changed_by uuid,
 
     changed_at timestamptz default now()
 
